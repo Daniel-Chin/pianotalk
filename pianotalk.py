@@ -1,9 +1,10 @@
+import os
+
 import numpy as np
 import time
 import heapq
-from subprocess import call
 
-from scipy import arange, fft
+from scipy.fft import fft
 from scipy.io import wavfile
 import scipy.fftpack
 
@@ -11,7 +12,7 @@ from mingus.containers import Note, NoteContainer
 from mingus.midi import fluidsynth
 
 #initialize global constants
-INPUT_FILE = 'audio/knife.wav'
+INPUT_FILE = 'audio/gus_3.wav'
 WINDOW_LEN = 0.01
 PLAYBACK = 0.0034
 BAR = []
@@ -72,12 +73,12 @@ def main():
     y = data[:,0]
 
     #load piano soundfont
-    SF2 = '~/roaming_linux_daniel/soundfonts/Yamaha-Grand-Lite-v2.0.sf2'
+    SF2 = os.path.expanduser('~/roaming_linux_daniel/soundfonts/Yamaha-Grand-Lite-v2.0.sf2')
     if not fluidsynth.init(SF2):
         print ("Couldn't load soundfont", SF2)
     
     #initialize variables for windowing
-    sampSize = (Fs * WINDOW_LEN)/2
+    sampSize = round((Fs * WINDOW_LEN)/2)
     prevStart = 0
     end = int(sampSize)
     totalSamp = int(len(y)/(sampSize*2) *2)
